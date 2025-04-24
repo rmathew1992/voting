@@ -3,12 +3,6 @@
   "name": "app",
   "private": true,
   "version": "0.1.0",
-  "babel": {
-    "presets": [
-      "./node_modules/shakapacker/package/babel/preset.js",
-      "@babel/preset-react"
-    ]
-  },
   "browserslist": [
     "defaults"
   ],
@@ -26,17 +20,23 @@
     "css-minimizer-webpack-plugin": "^7.0.0",
     "mini-css-extract-plugin": "^2.9.2",
     "react": "^18.3.1",
-    "react_ujs": "^3.2.1",
     "react-dom": "^18.3.1",
+    "react-router": "^7.5.1",
+    "react_ujs": "^3.2.1",
     "shakapacker": "8.1.0",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.11",
-    "webpack": "^5.97.1",
     "webpack-assets-manifest": "^5.2.1",
-    "webpack-cli": "^4.10.0",
     "webpack-merge": "^5.10.0"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.27.0",
+    "@types/node": "^22.14.1",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.6",
+    "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^4.15.2"
   }
 }

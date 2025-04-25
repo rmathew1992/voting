@@ -10,11 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_04_23_232446) do
+ActiveRecord::Schema[7.0].define(version: 2025_04_25_200958) do
   create_table "candidates", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "email", null: false
+    t.string "zipcode", null: false
+  end
+
+  create_table "votes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "candidate_id"
+    t.integer "user_id"
+    t.index ["candidate_id"], name: "index_votes_on_candidate_id"
+    t.index ["user_id"], name: "index_votes_on_user_id"
   end
 
 end

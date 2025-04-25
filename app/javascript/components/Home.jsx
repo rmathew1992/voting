@@ -1,8 +1,15 @@
 import React from "react";
 
-const Home = ({ message }) => {
+const Home = ({ candidates }) => {
   return (
-    <h1>Message: {message}</h1>
+        <div>
+            <h1> HI </h1>
+            {candidates.map(candidate => { 
+              return(
+                <h1>Candidate {candidate.name}</h1> 
+              )
+            })}
+        </div>
   );
 };
 

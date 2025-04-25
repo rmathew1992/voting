@@ -1,22 +1,25 @@
 import React, {useState, FormEvent} from "react";
-import { Candidate } from "../../Types";
+import { Candidate, User } from "../../Types";
 
 interface NewProps {
   candidates: Candidate[]
+  currentUser: User
 } 
 interface VotingForm {
   candidate: {
     id: null | number
     name: null | string
   }
+  currentUser: User
 }
 
-const New = ({ candidates }: NewProps) => {
+const New = ({ candidates, currentUser }: NewProps) => {
     const [formData, setFormData] = useState<VotingForm>({
         candidate: { 
             id: null,
             name: null,
-        }
+        }, 
+        currentUser
     });
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -35,7 +38,6 @@ const New = ({ candidates }: NewProps) => {
                     body: JSON.stringify(formData)
                 })
                 if (!response.ok) {     
-                    // In the future we could add more error handling on the page itself
                     console.error('Form submission failed:', response.statusText);
                     return
                 }
@@ -62,6 +64,7 @@ const New = ({ candidates }: NewProps) => {
 
     return (
         <div>
+            <h1> {currentUser.email} </h1>
             <form onSubmit={handleSubmit}>
                 {candidates.map(candidate => { 
                     const isSelected = formData.candidate.id !== null && candidate.id === formData.candidate.id;

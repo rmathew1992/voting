@@ -29,9 +29,7 @@ function New () {
                     return
                 }
                 const data = await response.json();
-                window.location.href = '/votes/new'
-                console.log('Form submitted successfully:', data);
-                //redirect
+                window.location.href = '/votes/new?'
             } catch (error) {
                 console.error('Error submitting form:', error);
             }

@@ -1,5 +1,6 @@
 import React, {useState, FormEvent} from "react";
 import { Candidate, User } from "../../Types";
+import { i } from "react-router/dist/development/fog-of-war-D4x86-Xc";
 
 interface NewProps {
   candidates: Candidate[]
@@ -7,24 +8,53 @@ interface NewProps {
 } 
 interface VotingForm {
   candidate: {
-    id: null | number
-    name: null | string
+    id?: number
+    name: string
   }
-  currentUser: User
+  writeIn: boolean
+}
+type FormErrors = {
+  candidate: {
+    name?: string;
+  }
+  submissionError?: string
 }
 
 const New = ({ candidates, currentUser }: NewProps) => {
     const [formData, setFormData] = useState<VotingForm>({
         candidate: { 
-            id: null,
-            name: null,
+            name: '',
         }, 
-        currentUser
+        writeIn: false
     });
+
+    const [errors, setErrors] = useState<FormErrors>({
+        candidate: {},
+    });
+
+    const validateForm = () => {
+        const newErrors: FormErrors = { candidate: {} };
+
+        if (!formData.candidate.name) {
+            newErrors.candidate.name = "Candidate is required";
+        }
+        return newErrors
+    }
+
+    function hasErrors(errors: FormErrors) {
+        return (
+            !!errors.candidate.name
+        );
+    }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const csrfTokenMeta = document.querySelector('[name="csrf-token"]') as HTMLMetaElement;
+        const validationErrors = validateForm();
+        if (hasErrors(validationErrors)) {
+            setErrors(validationErrors);
+            return
+        }   
 
         if (csrfTokenMeta) {
             const csrfToken = csrfTokenMeta.content;
@@ -37,14 +67,16 @@ const New = ({ candidates, currentUser }: NewProps) => {
                     },
                     body: JSON.stringify(formData)
                 })
+                const data = await response.json();
                 if (!response.ok) {     
-                    console.error('Form submission failed:', response.statusText);
+                    setErrors({
+                        ...errors,
+                        submissionError: data.data
+                    })
                     return
                 }
-                const data = await response.json();
-                window.location.href = '/votes/new'
+                window.location.href = '/'
                 console.log('Form submitted successfully:', data);
-                //redirect
             } catch (error) {
                 console.error('Error submitting form:', error);
             }
@@ -55,17 +87,39 @@ const New = ({ candidates, currentUser }: NewProps) => {
         const { name, value } = event.target;
         setFormData({
         ...formData,
-            candidate: {
+            candidate: { 
                 id: Number(value),
                 name: name 
-            }
+            }, 
+            writeIn: false
         });
     };
 
+    const handleWriteIn = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = event.target;
+        setFormData({
+        ...formData,
+            candidate: {
+                id: undefined,
+                name: value 
+            },
+            writeIn: true
+        });
+    };
+
+    const writeInName = formData.writeIn ? formData.candidate.name : ''
+
     return (
         <div>
-            <h1> {currentUser.email} </h1>
+            <div>
+                <h1> VOTE.WEBSITE </h1>
+                <h1> {currentUser.email} </h1>
+            </div>
+
+            <h1> Cast your vote today! </h1>
+            {errors.submissionError &&  <h1>{errors.submissionError}</h1> }
             <form onSubmit={handleSubmit}>
+                {errors.candidate.name && <span style={{ color: "red" }}>{errors.candidate.name}</span>}
                 {candidates.map(candidate => { 
                     const isSelected = formData.candidate.id !== null && candidate.id === formData.candidate.id;
                     return(
@@ -82,6 +136,15 @@ const New = ({ candidates, currentUser }: NewProps) => {
                         </div>
                     )
                  })}
+                <label>
+                    Or, add a new candidate:
+                    <input 
+                        type="text" 
+                        name="name" 
+                        value={writeInName}
+                        onChange={handleWriteIn}
+                    />
+                </label>
                 <input type="submit" value="Submit" />
             </form>
         </div>

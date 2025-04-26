@@ -112,41 +112,50 @@ const New = ({ candidates, currentUser }: NewProps) => {
     return (
         <div>
             <div>
-                <h1> VOTE.WEBSITE </h1>
-                <h1> {currentUser.email} </h1>
+                <div style={{ display: 'flex', justifyContent: 'space-between',  padding: '15px'}}>
+                    <p>VOTE.WEBSITE</p>
+                    <p> {currentUser.email} </p>
+                </div>
+                <hr style={{ margin: '0'}} />
             </div>
 
-            <h1> Cast your vote today! </h1>
-            {errors.submissionError &&  <h1>{errors.submissionError}</h1> }
-            <form onSubmit={handleSubmit}>
+            <div style={{ position: 'relative', width: '500px', maxWidth: '100%', margin: '50px auto' }}>
+                <h1> Cast your vote today! </h1>
+                {errors.submissionError && <h1>{errors.submissionError}</h1>}
+                <form onSubmit={handleSubmit}>
                 {errors.candidate.name && <span style={{ color: "red" }}>{errors.candidate.name}</span>}
-                {candidates.map(candidate => { 
-                    const isSelected = formData.candidate.id !== null && candidate.id === formData.candidate.id;
-                    return(
-                        <div key={"container" + candidate.id}>
-                            <input 
-                                type="radio" 
-                                key={candidate.id} 
-                                onChange={handleInputChange} 
-                                value={candidate.id} 
-                                checked={isSelected}
-                                name={candidate.name}
-                            />
-                            {candidate.name}
-                        </div>
+                {candidates.map(candidate => {
+                    const isSelected = candidate.id === formData.candidate.id && !formData.writeIn;
+                    return (
+                    <div key={"container" + candidate.id}>
+                        <input
+                        type="radio"
+                        key={candidate.id}
+                        onChange={handleInputChange}
+                        value={candidate.id}
+                        checked={isSelected}
+                        name="candidate"
+                        />
+                        {candidate.name}
+                    </div>
                     )
-                 })}
-                <label>
-                    Or, add a new candidate:
-                    <input 
-                        type="text" 
-                        name="name" 
-                        value={writeInName}
-                        onChange={handleWriteIn}
+                })}
+                <hr />
+                <div style={{display: 'flex', flexDirection: 'column', paddingBottom: '15px'}}>
+                    <label>
+                        Or, add a new candidate:
+                    </label>
+                    <input
+                    type="text"
+                    style={{width: '200px', borderRadius: '5px', border: "1px solid #ccc"}}
+                    name="name"
+                    value={writeInName}
+                    onChange={handleWriteIn}
                     />
-                </label>
+                </div>
                 <input type="submit" value="Submit" />
-            </form>
+                </form>
+            </div>
         </div>
     )
 };

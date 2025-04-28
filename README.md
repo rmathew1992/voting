@@ -1,10 +1,8 @@
 # Voting app for interview exercises
 
-This Rails and React application is the starting point for our Voting app
-interview exercise. You may not need all the various files included to complete
-the assignment, but they are here in case they help you move faster! Please
-modify anything you need to in order to meet the requirements and show us your
-own approach.
+### Thanks for considering me!
+
+Thanks for taking the time to review my interview! I left some notes about what I might improve in the future on the PR that I merged. 
 
 ## Installation
 
